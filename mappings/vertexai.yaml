@@ -1,0 +1,51 @@
+# Google Vertex AI / Gemini attribute mappings
+# Sources: google-cloud-aiplatform, vertexai-python, OpenLLMetry
+# Last verified: 2024-12
+
+vendor: google
+framework: vertexai
+description: >
+  Mappings for Google Vertex AI and Gemini API calls. When
+  instrumented via OpenLLMetry, these follow the llm.* namespace.
+  Native Google tracing may use different keys.
+
+mappings:
+  # Model
+  llm.request.model: gen_ai.request.model
+  llm.response.model: gen_ai.response.model
+  llm.model: gen_ai.request.model
+  model: gen_ai.request.model
+
+  # Provider
+  llm.vendor: gen_ai.system
+
+  # Token usage
+  llm.usage.prompt_tokens: gen_ai.usage.input_tokens
+  llm.usage.completion_tokens: gen_ai.usage.output_tokens
+  llm.usage.total_tokens: gen_ai.usage.total_tokens
+  prompt_tokens: gen_ai.usage.input_tokens
+  completion_tokens: gen_ai.usage.output_tokens
+
+  # Request parameters
+  llm.request.temperature: gen_ai.request.temperature
+  llm.request.max_tokens: gen_ai.request.max_tokens
+  llm.request.top_p: gen_ai.request.top_p
+  llm.temperature: gen_ai.request.temperature
+  max_tokens: gen_ai.request.max_tokens
+  top_p: gen_ai.request.top_p
+
+  # Response
+  llm.response.finish_reason: gen_ai.response.finish_reasons
+  finish_reason: gen_ai.response.finish_reasons
+
+  # Content
+  llm.prompt: gen_ai.prompt
+  llm.completion: gen_ai.completion
+
+  # Cost
+  llm.usage.cost: gen_ai.usage.cost
+
+# Known span names emitted:
+#   - vertexai.predict
+#   - vertexai.generate_content
+#   - gemini.generate_content

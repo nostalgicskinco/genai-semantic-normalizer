@@ -1,8 +1,12 @@
 # genai-semantic-normalizer
 
-**OTel Collector processor that normalizes vendor/framework LLM attributes to canonical `gen_ai.*` semantic conventions.**
+**The compatibility layer between AI frameworks and observability systems.**
 
-Every GenAI framework (LangChain, OpenInference, OpenLLMetry, LiteLLM, Traceloop) uses different attribute names for the same thing. This processor maps them all to the official [OTel GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/) so you can build one Grafana dashboard and one set of alerts — regardless of which SDKs your teams use.
+AI broke observability. Every GenAI framework (LangChain, OpenInference, OpenLLMetry, LiteLLM, Traceloop) invented its own telemetry schema. That fragmentation means you can't build a single dashboard, a single alert, or a single cost report across teams.
+
+This project solves it at the infrastructure level — a collector-side processor that maps all vendor attributes to the official [OTel GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/). 90+ built-in mappings across 8 vendors. One pipeline. One schema. One dashboard.
+
+Part of the [GenAI Observability Infrastructure](https://github.com/nostalgicskinco/opentelemetry-collector-processor-genai) project.
 
 ---
 
@@ -194,9 +198,26 @@ service:
 
 ---
 
+## Vendor Mapping Packs
+
+Per-vendor YAML files documenting exact attribute keys and their canonical mappings:
+
+| Vendor | File | Framework |
+|---|---|---|
+| OpenAI | [openai.yaml](mappings/openai.yaml) | OpenLLMetry |
+| Anthropic | [anthropic.yaml](mappings/anthropic.yaml) | OpenLLMetry |
+| LangChain | [langchain.yaml](mappings/langchain.yaml) | LangChain |
+| LlamaIndex | [llamaindex.yaml](mappings/llamaindex.yaml) | OpenInference |
+| Google Vertex AI | [vertexai.yaml](mappings/vertexai.yaml) | Vertex AI |
+| AWS Bedrock | [bedrock.yaml](mappings/bedrock.yaml) | Bedrock |
+| Traceloop | [traceloop.yaml](mappings/traceloop.yaml) | OpenLLMetry |
+| LiteLLM | [litellm.yaml](mappings/litellm.yaml) | LiteLLM |
+
+---
+
 ## Contributing
 
-PRs welcome. To add mappings for a new framework, update `defaults.go` and `docs/compatibility-matrix.md`.
+PRs welcome. To add mappings for a new framework, update `defaults.go` and `docs/compatibility-matrix.md`. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines and CLA.
 
 ```bash
 go test -v ./...
@@ -207,4 +228,8 @@ go vet ./...
 
 ## License
 
-Apache 2.0
+**v0.1.0 and earlier:** Apache 2.0 ([release](https://github.com/nostalgicskinco/genai-semantic-normalizer/releases/tag/v0.1.0))
+
+**v0.2.0+:** [GNU Affero General Public License v3.0](LICENSE) with a [commercial license](COMMERCIAL_LICENSE.md) available for hosted services and commercial products.
+
+**Free for internal use.** Companies running this processor in their own OTel Collector deployments do not need a commercial license. See [COMMERCIAL_LICENSE.md](COMMERCIAL_LICENSE.md) for details.

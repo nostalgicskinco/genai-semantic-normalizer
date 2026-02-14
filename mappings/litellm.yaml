@@ -1,0 +1,47 @@
+# LiteLLM attribute mappings
+# Sources: litellm-python proxy and SDK
+# Last verified: 2024-12
+
+vendor: litellm
+framework: litellm
+description: >
+  Mappings for LiteLLM instrumented spans. LiteLLM is a proxy
+  that normalizes calls across 100+ LLM providers. It emits
+  its own litellm.* namespace attributes.
+
+mappings:
+  # Model
+  litellm.model: gen_ai.request.model
+  llm.model: gen_ai.request.model
+  model: gen_ai.request.model
+
+  # Provider
+  litellm.provider: gen_ai.system
+  llm.provider: gen_ai.system
+
+  # Token usage
+  litellm.usage.prompt_tokens: gen_ai.usage.input_tokens
+  litellm.usage.completion_tokens: gen_ai.usage.output_tokens
+  llm.usage.prompt_tokens: gen_ai.usage.input_tokens
+  llm.usage.completion_tokens: gen_ai.usage.output_tokens
+  llm.usage.total_tokens: gen_ai.usage.total_tokens
+
+  # Request parameters
+  llm.temperature: gen_ai.request.temperature
+  llm.max_tokens: gen_ai.request.max_tokens
+
+  # Response
+  finish_reason: gen_ai.response.finish_reasons
+
+  # Content
+  llm.prompt: gen_ai.prompt
+  llm.completion: gen_ai.completion
+
+  # Cost (LiteLLM tracks cost natively)
+  litellm.cost: gen_ai.usage.cost
+  llm.usage.cost_usd: gen_ai.usage.cost
+
+# Known span names emitted:
+#   - litellm.completion
+#   - litellm.acompletion
+#   - litellm.embedding

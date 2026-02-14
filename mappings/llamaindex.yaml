@@ -1,0 +1,45 @@
+# LlamaIndex attribute mappings
+# Sources: llama-index-python, OpenInference instrumentation
+# Last verified: 2024-12
+
+vendor: llamaindex
+framework: openinference
+description: >
+  Mappings for LlamaIndex instrumented spans. LlamaIndex primarily
+  uses OpenInference semantic conventions for its tracing, so most
+  attributes follow the openinference.* namespace.
+
+mappings:
+  # Model
+  openinference.model_name: gen_ai.request.model
+  llm.model: gen_ai.request.model
+
+  # Provider
+  openinference.llm.provider: gen_ai.system
+  llm.provider: gen_ai.system
+
+  # Token usage
+  openinference.llm.token_count.prompt: gen_ai.usage.input_tokens
+  openinference.llm.token_count.completion: gen_ai.usage.output_tokens
+  llm.token_count.prompt: gen_ai.usage.input_tokens
+  llm.token_count.completion: gen_ai.usage.output_tokens
+
+  # Request parameters
+  openinference.llm.temperature: gen_ai.request.temperature
+  openinference.llm.max_tokens: gen_ai.request.max_tokens
+  llm.temperature: gen_ai.request.temperature
+
+  # Content
+  openinference.input.value: gen_ai.prompt
+  openinference.output.value: gen_ai.completion
+
+  # Response
+  finish_reason: gen_ai.response.finish_reasons
+
+# Known span names emitted:
+#   - llm (OpenInference span kind)
+#   - retriever
+#   - embedding
+#   - tool
+#   - chain
+#   - agent
