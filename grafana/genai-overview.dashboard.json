@@ -1,0 +1,113 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "title": "LLM Calls Over Time",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "datasource": { "type": "tempo" },
+          "queryType": "traceql",
+          "query": "{ span.gen_ai.request.model != \"\" } | rate()"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "ops" }
+      }
+    },
+    {
+      "title": "Token Usage by Model",
+      "type": "barchart",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "targets": [
+        {
+          "datasource": { "type": "tempo" },
+          "queryType": "traceql",
+          "query": "{ span.gen_ai.request.model != \"\" } | select(span.gen_ai.request.model, span.gen_ai.usage.input_tokens, span.gen_ai.usage.output_tokens)"
+        }
+      ]
+    },
+    {
+      "title": "Models in Use",
+      "type": "piechart",
+      "gridPos": { "h": 8, "w": 6, "x": 0, "y": 8 },
+      "targets": [
+        {
+          "datasource": { "type": "tempo" },
+          "queryType": "traceql",
+          "query": "{ span.gen_ai.request.model != \"\" } | select(span.gen_ai.request.model) | count() by (span.gen_ai.request.model)"
+        }
+      ]
+    },
+    {
+      "title": "Providers in Use",
+      "type": "piechart",
+      "gridPos": { "h": 8, "w": 6, "x": 6, "y": 8 },
+      "targets": [
+        {
+          "datasource": { "type": "tempo" },
+          "queryType": "traceql",
+          "query": "{ span.gen_ai.system != \"\" } | select(span.gen_ai.system) | count() by (span.gen_ai.system)"
+        }
+      ]
+    },
+    {
+      "title": "Avg Latency by Model",
+      "type": "bargauge",
+      "gridPos": { "h": 8, "w": 6, "x": 12, "y": 8 },
+      "targets": [
+        {
+          "datasource": { "type": "tempo" },
+          "queryType": "traceql",
+          "query": "{ span.gen_ai.request.model != \"\" } | select(span.gen_ai.request.model, duration) | avg(duration) by (span.gen_ai.request.model)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "ms" }
+      }
+    },
+    {
+      "title": "Cost Over Time",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 6, "x": 18, "y": 8 },
+      "targets": [
+        {
+          "datasource": { "type": "tempo" },
+          "queryType": "traceql",
+          "query": "{ span.gen_ai.usage.cost != 0 } | select(span.gen_ai.usage.cost) | sum(span.gen_ai.usage.cost)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "currencyUSD" }
+      }
+    },
+    {
+      "title": "Finish Reasons",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 24, "x": 0, "y": 16 },
+      "targets": [
+        {
+          "datasource": { "type": "tempo" },
+          "queryType": "traceql",
+          "query": "{ span.gen_ai.response.finish_reasons != \"\" } | count() by (span.gen_ai.response.finish_reasons)"
+        }
+      ]
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": ["genai", "llm", "opentelemetry"],
+  "templating": { "list": [] },
+  "time": { "from": "now-1h", "to": "now" },
+  "timepicker": {},
+  "timezone": "",
+  "title": "GenAI Overview",
+  "uid": "genai-overview-v1",
+  "version": 1
+}

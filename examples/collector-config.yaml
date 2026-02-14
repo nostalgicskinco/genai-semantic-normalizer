@@ -1,0 +1,33 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: "0.0.0.0:4317"
+      http:
+        endpoint: "0.0.0.0:4318"
+
+processors:
+  genai_semantic_normalizer:
+    enable_defaults: true
+    overwrite: false
+    drop_original: false
+    mappings:
+      # Add your org/framework-specific keys here.
+      # These merge on top of the built-in defaults.
+      # Example:
+      # my.custom.model_attr: gen_ai.request.model
+
+exporters:
+  debug:
+    verbosity: detailed
+  otlp:
+    endpoint: "jaeger:4317"
+    tls:
+      insecure: true
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [genai_semantic_normalizer]
+      exporters: [otlp, debug]
