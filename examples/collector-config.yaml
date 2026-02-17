@@ -1,0 +1,30 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+
+processors:
+  genai_semantic_normalizer:
+    enable_defaults: true
+    overwrite: false
+    drop_original: false
+    mappings:
+      # Example override/additions:
+      # openinference.model_name: gen_ai.request.model
+      # openllmetry.model: gen_ai.request.model
+
+exporters:
+  debug:
+    verbosity: detailed
+
+extensions:
+  health_check: {}
+
+service:
+  extensions: [health_check]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [genai_semantic_normalizer]
+      exporters: [debug]
