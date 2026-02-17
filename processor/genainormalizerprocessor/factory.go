@@ -16,7 +16,7 @@ const (
 func NewFactory() processor.Factory {
 	return processor.NewFactory(
 		component.MustNewType(typeStr),
-		createDefaultConfig,
+		func() component.Config { return createDefaultConfig() },
 		processor.WithTraces(createTracesProcessor, component.StabilityLevelDevelopment),
 	)
 }

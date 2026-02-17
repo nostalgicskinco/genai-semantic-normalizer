@@ -3,7 +3,9 @@ package genainormprocessor
 import (
 	"context"
 
+	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/consumer"
+	"go.opentelemetry.io/collector/pdata/pcommon"
 	"go.opentelemetry.io/collector/pdata/ptrace"
 	"go.uber.org/zap"
 )
@@ -148,7 +150,7 @@ func (p *normalizerProcessor) normalizeSpan(span ptrace.Span) {
 	}
 }
 
-func inferSystem(attrs ptrace.Map) string {
+func inferSystem(attrs pcommon.Map) string {
 	prefixes := map[string]string{
 		"openai.":    "openai",
 		"anthropic.": "anthropic",
@@ -158,7 +160,7 @@ func inferSystem(attrs ptrace.Map) string {
 	}
 
 	found := ""
-	attrs.Range(func(k string, _ ptrace.Value) bool {
+	attrs.Range(func(k string, _ pcommon.Value) bool {
 		for prefix, system := range prefixes {
 			if len(k) > len(prefix) && k[:len(prefix)] == prefix {
 				found = system

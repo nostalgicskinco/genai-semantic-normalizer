@@ -14,7 +14,7 @@ import (
 
 func TestApplyMappings_SpanAndEvents(t *testing.T) {
 	next := consumertest.NewNop()
-	settings := processor.CreateSettings{Logger: zap.NewNop()}
+	settings := processor.CreateSettings{TelemetrySettings: component.TelemetrySettings{Logger: zap.NewNop()}}
 	cfg := &Config{
 		EnableDefaults: false,
 		Overwrite:      false,
@@ -54,7 +54,7 @@ func TestApplyMappings_SpanAndEvents(t *testing.T) {
 
 func TestOverwriteAndDropOriginal(t *testing.T) {
 	next := consumertest.NewNop()
-	settings := processor.CreateSettings{Logger: zap.NewNop()}
+	settings := processor.CreateSettings{TelemetrySettings: component.TelemetrySettings{Logger: zap.NewNop()}}
 	cfg := &Config{
 		EnableDefaults: false,
 		Overwrite:      true,
